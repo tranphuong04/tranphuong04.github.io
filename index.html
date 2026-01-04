@@ -83,7 +83,7 @@
 
                 <div class="step-title">
                     <span class="step-num" style="background: #27ae60;">BƯỚC 2</span>
-                    Train dữ liệu
+                    Tải dữ liệu lên
                 </div>
                 <div style="display: flex; gap: 20px; flex-wrap: wrap;">
                     <div style="flex: 1;">
@@ -95,6 +95,14 @@
                         <div class="caption">Hình 3: Mẫu ảnh ngẫu nhiên từ tập Train.</div>
                     </div>
                 </div>
+
+                <div class="step-title">
+                    <span class="step-num" style="background: #0984e3;">BƯỚC 3</span>
+                    Train dữ liệu
+                </div>
+                <p style="font-size: 0.9rem; color: #636e72;">Đưa các file trọng số (Weights) lên hệ thống tệp phân tán HDFS.</p>
+                <img src="images/hdfs_models.jfif" alt="File model trên HDFS" class="evidence-img">
+                <div class="caption">Hình 4: Các file Model đã được tải lên HDFS.</div>
             </div>
         </div>
 
@@ -111,7 +119,7 @@
                 <p><strong>Kết quả thực tế:</strong> Hệ thống bị treo do tràn bộ nhớ.</p>
                 
                 <img src="images/manual_fail.jfif" alt="Ảnh lỗi Java Heap Space" class="evidence-img">
-                <div class="caption">Hình 4: Log báo lỗi .</div>
+                <div class="caption">Hình 5: Log báo lỗi .</div>
             </div>
         </div>
 
@@ -127,15 +135,7 @@
                 <p>Hệ thống được chuyển đổi sang kiến trúc phân tán Hadoop để giải quyết vấn đề bộ nhớ.</p>
 
                 <div class="step-title">
-                    <span class="step-num" style="background: #0984e3;">BƯỚC 1</span>
-                    Tải Model lên HDFS (Distributed Cache)
-                </div>
-                <p style="font-size: 0.9rem; color: #636e72;">Đưa các file trọng số (Weights) lên hệ thống tệp phân tán HDFS.</p>
-                <img src="images/hdfs_models.jfif" alt="File model trên HDFS" class="evidence-img">
-                <div class="caption">Hình 5: Các file Model đã được tải lên HDFS.</div>
-
-                <div class="step-title">
-                    <span class="step-num" style="background: #e17055;">BƯỚC 2</span>
+                    <span class="step-num" style="background: #e17055;"></span>
                     Thực thi MapReduce
                 </div>
                 <p style="font-size: 0.9rem; color: #636e72; margin-bottom: 15px;">Quá trình xử lý song song diễn ra qua 4 giai đoạn:</p>
