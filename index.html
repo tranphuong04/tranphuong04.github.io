@@ -73,14 +73,26 @@
             <div class="card-body">
                 <p><strong>Mô tả:</strong> Tập dữ liệu huấn luyện bao gồm 1.119 ảnh đầu vào với các vật thể đa dạng (cá vàng, quả cherry, túi vải...) được sử dụng để kiểm thử hiệu năng hệ thống.</p>
                 
+                <div class="step-title">
+                    <span class="step-num" style="background: #27ae60;">BƯỚC 1</span>
+                    Clone Mã nguồn & Cấu hình
+                </div>
+                <p style="font-size: 0.9rem; color: #636e72;">Clone mã nguồn từ GitHub.</p>
+                <img src="images/git_clone.jfif" alt="Repository GitHub" class="evidence-img">
+                <div class="caption">Hình 1: Mã nguồn dự án trên GitHub Repository.</div>
+
+                <div class="step-title">
+                    <span class="step-num" style="background: #27ae60;">BƯỚC 2</span>
+                    Train dữ liệu
+                </div>
                 <div style="display: flex; gap: 20px; flex-wrap: wrap;">
                     <div style="flex: 1;">
                         <img src="images/train.jfif" alt="Log dataset" class="evidence-img">
-                        <div class="caption">Hình 1: Log thống kê số lượng dữ liệu (1119 train, 20 test).</div>
+                        <div class="caption">Hình 2: Log thống kê số lượng dữ liệu (1119 train, 20 test).</div>
                     </div>
                     <div style="flex: 1;">
                         <img src="images/random.jfif" alt="Mẫu ảnh dataset" class="evidence-img">
-                        <div class="caption">Hình 2: Mẫu ảnh ngẫu nhiên từ tập Train.</div>
+                        <div class="caption">Hình 3: Mẫu ảnh ngẫu nhiên từ tập Train.</div>
                     </div>
                 </div>
             </div>
@@ -99,7 +111,7 @@
                 <p><strong>Kết quả thực tế:</strong> Hệ thống bị treo do tràn bộ nhớ.</p>
                 
                 <img src="images/manual_fail.jfif" alt="Ảnh lỗi Java Heap Space" class="evidence-img">
-                <div class="caption">Hình 3: Log báo lỗi .</div>
+                <div class="caption">Hình 4: Log báo lỗi .</div>
             </div>
         </div>
 
@@ -115,15 +127,7 @@
                 <p>Hệ thống được chuyển đổi sang kiến trúc phân tán Hadoop để giải quyết vấn đề bộ nhớ.</p>
 
                 <div class="step-title">
-                    <span class="step-num" style="background: #27ae60;">BƯỚC 1</span>
-                    Clone Mã nguồn & Cấu hình
-                </div>
-                <p style="font-size: 0.9rem; color: #636e72;">Tải mã nguồn từ GitHub về Master Node.</p>
-                <img src="images/git_clone.jfif" alt="Repository GitHub" class="evidence-img">
-                <div class="caption">Hình 4: Mã nguồn dự án trên GitHub Repository.</div>
-
-                <div class="step-title">
-                    <span class="step-num" style="background: #0984e3;">BƯỚC 2</span>
+                    <span class="step-num" style="background: #0984e3;">BƯỚC 1</span>
                     Tải Model lên HDFS (Distributed Cache)
                 </div>
                 <p style="font-size: 0.9rem; color: #636e72;">Đưa các file trọng số (Weights) lên hệ thống tệp phân tán HDFS.</p>
@@ -131,28 +135,28 @@
                 <div class="caption">Hình 5: Các file Model đã được tải lên HDFS.</div>
 
                 <div class="step-title">
-                    <span class="step-num" style="background: #e17055;">BƯỚC 3</span>
+                    <span class="step-num" style="background: #e17055;">BƯỚC 2</span>
                     Thực thi MapReduce
                 </div>
                 <p style="font-size: 0.9rem; color: #636e72; margin-bottom: 15px;">Quá trình xử lý song song diễn ra qua 4 giai đoạn:</p>
 
                 <div style="margin-bottom: 20px;">
-                    <strong style="color: #2d3436; font-size: 0.9rem;">3.1. Input Splitting:</strong>
+                    <strong style="color: #2d3436; font-size: 0.9rem;">2.1. Input Splitting:</strong>
                     <img src="images/split.jpg" alt="Log Split" class="evidence-img">
                 </div>
 
                 <div style="margin-bottom: 20px;">
-                    <strong style="color: #2d3436; font-size: 0.9rem;">3.2. Mapping:</strong>
+                    <strong style="color: #2d3436; font-size: 0.9rem;">2.2. Mapping:</strong>
                     <img src="images/mapping.jpg" alt="Log Map" class="evidence-img">
                 </div>
 
                 <div style="margin-bottom: 20px;">
-                    <strong style="color: #2d3436; font-size: 0.9rem;">3.3. Shuffle & Sort:</strong>
+                    <strong style="color: #2d3436; font-size: 0.9rem;">2.3. Shuffle & Sort:</strong>
                     <img src="images/shuffle.jpg" alt="Log Shuffle" class="evidence-img">
                 </div>
 
                 <div>
-                    <strong style="color: #2d3436; font-size: 0.9rem;">3.4. Reducing:</strong>
+                    <strong style="color: #2d3436; font-size: 0.9rem;">2.4. Reducing:</strong>
                     <img src="images/reduce.jpg" alt="Log Reduce" class="evidence-img">
                 </div>
             </div>
@@ -162,44 +166,85 @@
             <div class="card-header">
                 <div class="card-title">
                     <i class="fas fa-images" style="color: #0984e3;"></i>
-                    3. Kết quả File Hiển thị (Output)
+                    3. Kết quả File Hiển thị (Output Visualization)
                 </div>
             </div>
             <div class="card-body">
-                <p> Dưới đây là minh họa 1 mẫu dữ liệu đã tách lớp thành công.</p>
-                
-                <div class="result-wrapper">
-                    <div class="input-box">
-                        <div style="font-weight:bold; margin-bottom:10px; color:#2d3436;">INPUT (Ảnh gốc)</div>
-                        <img src="images/input.jpg" alt="Input Image">
-                        <div style="font-size:0.8rem; color:#b2bec3; margin-top:5px;">File: train_0045.jpg</div>
-                    </div>
+                <p>Sau khi MapReduce hoàn tất, các lớp vật thể (Layers) được tách biệt và lưu trữ trên HDFS. Dưới đây là kết quả trích xuất từ mẫu kiểm thử <code>train_0045.jpg</code>.</p>
 
-                    <div class="output-box">
-                        <div style="font-weight:bold; margin-bottom:10px; color:#2d3436;">OUTPUT LAYERS</div>
-                        <div class="gallery-grid">
-                            <div class="gallery-item">
-                                <img src="images/layer1.jpg"><div class="gallery-label">Layer 1</div>
-                            </div>
-                            <div class="gallery-item">
-                                <img src="images/layer2.jpg"><div class="gallery-label">Layer 2</div>
-                            </div>
-                            <div class="gallery-item">
-                                <img src="images/layer3.jpg"><div class="gallery-label">Layer 3</div>
-                            </div>
-                            <div class="gallery-item">
-                                <img src="images/layer4.jpg"><div class="gallery-label">Layer 4</div>
-                            </div>
-                            <div class="gallery-item">
-                                <img src="images/layer5.jpg"><div class="gallery-label">Layer 5</div>
+                <div class="result-wrapper" style="margin-top: 25px;">
+                    
+                    <div class="input-box" style="flex: 0 0 250px;">
+                        <div style="background: #2d3436; color: white; padding: 5px 10px; border-radius: 6px 6px 0 0; font-weight: bold; font-size: 0.9em;">INPUT IMAGE</div>
+                        <div style="border: 2px solid #2d3436; border-radius: 0 0 6px 6px; padding: 10px; background: white;">
+                            <img src="images/input.jpg" alt="Input Image" style="width: 100%; display: block; border-radius: 4px;">
+                            <div style="font-size: 0.8em; color: #636e72; margin-top: 8px; border-top: 1px solid #eee; padding-top: 5px;">
+                                <div><i class="fas fa-file-image"></i> train_0045.jpg</div>
+                                <div><i class="fas fa-ruler-combined"></i> 512x512 px</div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="output-box" style="flex: 1;">
+                        <div style="background: #0984e3; color: white; padding: 5px 10px; border-radius: 6px 6px 0 0; font-weight: bold; font-size: 0.9em; display: flex; justify-content: space-between;">
+                            <span>OUTPUT LAYERS (HDFS)</span>
+                            <span style="font-weight: normal; font-size: 0.9em;"><i class="fas fa-check-circle"></i> Success</span>
+                        </div>
+                        
+                        <div style="border: 2px solid #0984e3; border-radius: 0 0 6px 6px; padding: 15px; background: white;">
+                            <div class="gallery-grid" style="grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));">
+                                
+                                <div class="gallery-item">
+                                    <div style="position: relative; overflow: hidden; border-radius: 6px; border: 1px solid #eee;">
+                                        <img src="images/layer1.jpg" style="width: 100%; height: 100px; object-fit: cover; background: #f0f0f0;">
+                                        <span style="position: absolute; top: 0; left: 0; background: rgba(0,0,0,0.6); color: white; font-size: 0.7em; padding: 2px 6px;">L1</span>
+                                    </div>
+                                    <div class="gallery-label">Background</div>
+                                </div>
+
+                                <div class="gallery-item">
+                                    <div style="position: relative; overflow: hidden; border-radius: 6px; border: 1px solid #eee;">
+                                        <img src="images/layer2.jpg" style="width: 100%; height: 100px; object-fit: cover; background: url('https://upload.wikimedia.org/wikipedia/commons/2/23/Checkerboard_pattern.svg');">
+                                        <span style="position: absolute; top: 0; left: 0; background: rgba(0,0,0,0.6); color: white; font-size: 0.7em; padding: 2px 6px;">L2</span>
+                                    </div>
+                                    <div class="gallery-label">Object A</div>
+                                </div>
+
+                                <div class="gallery-item">
+                                    <div style="position: relative; overflow: hidden; border-radius: 6px; border: 1px solid #eee;">
+                                        <img src="images/layer3.jpg" style="width: 100%; height: 100px; object-fit: cover; background: url('https://upload.wikimedia.org/wikipedia/commons/2/23/Checkerboard_pattern.svg');">
+                                        <span style="position: absolute; top: 0; left: 0; background: rgba(0,0,0,0.6); color: white; font-size: 0.7em; padding: 2px 6px;">L3</span>
+                                    </div>
+                                    <div class="gallery-label">Object B</div>
+                                </div>
+
+                                <div class="gallery-item">
+                                    <div style="position: relative; overflow: hidden; border-radius: 6px; border: 1px solid #eee;">
+                                        <img src="images/layer4.jpg" style="width: 100%; height: 100px; object-fit: cover; background: url('https://upload.wikimedia.org/wikipedia/commons/2/23/Checkerboard_pattern.svg');">
+                                        <span style="position: absolute; top: 0; left: 0; background: rgba(0,0,0,0.6); color: white; font-size: 0.7em; padding: 2px 6px;">L4</span>
+                                    </div>
+                                    <div class="gallery-label">Object C</div>
+                                </div>
+
+                                <div class="gallery-item">
+                                    <div style="position: relative; overflow: hidden; border-radius: 6px; border: 1px solid #eee;">
+                                        <img src="images/layer5.jpg" style="width: 100%; height: 100px; object-fit: cover; background: url('https://upload.wikimedia.org/wikipedia/commons/2/23/Checkerboard_pattern.svg');">
+                                        <span style="position: absolute; top: 0; left: 0; background: rgba(0,0,0,0.6); color: white; font-size: 0.7em; padding: 2px 6px;">L5</span>
+                                    </div>
+                                    <div class="gallery-label">Foreground</div>
+                                </div>
+
+                            </div>
+                            
+                            <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 4px; font-size: 0.85em; color: #636e72;">
+                                <i class="fas fa-info-circle"></i> <strong>Note:</strong> Các lớp (L2-L5) có nền trong suốt (RGBA) để phục vụ ghép ảnh (Compositing).
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
-
-    </div>
 
     <div class="footer">
         &copy; 2025 - Dai hoc Thuy Loi
