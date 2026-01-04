@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo: CObL on MapReduce</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #0984e3;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+            --dark: #2d3436;
+            --light: #dfe6e9;
+            --bg: #f5f7fa;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* --- HEADER BANNER --- */
+        .hero {
+            background: linear-gradient(135deg, #0984e3 0%, #74b9ff 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .hero h1 { margin: 0; font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; }
+        .hero p { font-size: 1.1rem; opacity: 0.9; margin-top: 10px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .hero .meta { font-size: 0.9rem; margin-top: 20px; background: rgba(255,255,255,0.2); display: inline-block; padding: 5px 15px; border-radius: 50px; }
+
+        .container {
+            max-width: 1000px;
+            margin: -40px auto 40px; /* Đẩy nội dung lên đè banner 1 chút */
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* --- CARD STYLE --- */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-2px); }
+
+        .card-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid #f1f2f6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+        }
+        .card-title { font-size: 1.1rem; font-weight: 700; color: #2d3436; display: flex; align-items: center; gap: 10px; }
+        .card-body { padding: 30px; }
+
+        /* --- BADGES --- */
+        .badge { font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge.warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .badge.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+
+        /* --- TERMINAL --- */
+        .terminal {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+            margin-top: 15px;
+        }
+        .terminal-header { display: flex; gap: 6px; margin-bottom: 15px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+
+        .cmd { color: #f1c40f; }
+        .log-time { color: #f39c12; font-weight: bold; }
+        .log-success { color: #2ecc71; font-weight: bold; }
+        .log-info { color: #3498db; }
+        .blink { animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* --- GALLERY --- */
+        .result-wrapper { display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; }
+        .input-box { flex: 0 0 200px; text-align: center; }
+        .input-box img { width: 100%; border-radius: 8px; border: 3px solid #dfe6e9; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        
+        .output-box { flex: 1; }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+        .gallery-item { text-align: center; }
+        .gallery-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #eee;
+            background-image: 
+                linear-gradient(45deg, #ccc 25%, transparent 25%), 
+                linear-gradient(-45deg, #ccc 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #ccc 75%), 
+                linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            transition: transform 0.2s;
+        }
+        .gallery-item img:hover { transform: scale(1.05); border-color: var(--primary); cursor: pointer; }
+        .gallery-label { font-size: 0.8rem; color: #636e72; margin-top: 5px; font-weight: 500; }
+
+        /* --- FOOTER --- */
+        .footer { text-align: center; padding: 40px; color: #b2bec3; font-size: 0.9rem; }
+        
+        /* Button */
+        .btn-dl {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #fff; color: var(--primary);
+            padding: 10px 20px; border-radius: 50px;
+            text-decoration: none; font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .btn-dl:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <h1>BÁO CÁO BÀI TẬP LỚN</h1>
+        <p>Xử lý dữ liệu lớn bằng kỹ thuật Phân lớp thứ bậc</p>
+        <div class="meta">Nhóm 10 • 64HTTT1
+        </div>
+        <br><br>
+    </div>
+
+    <div class="container">
+
+        <div class="card" style="border-left: 5px solid #f39c12;">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-laptop-code" style="color: #f39c12;"></i> 
+                    1. Thử nghiệm Chạy Thủ công (Manual)
+                </div>
+                <span class="badge warning">Thành công (Tốc độ chậm)</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Mô tả:</strong> Chạy mô hình tuần tự trên máy đơn (Standalone) với vòng lặp <code>for</code> xử lý lần lượt 1.000 ảnh.</p>
+                <p><strong>Kết quả:</strong> Hệ thống hoạt động nhưng thời gian chờ đợi quá lâu, không tận dụng được tài nguyên đa nhân.</p>
+                
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+                    </div>
+                    <div><span style="color:#2ecc71">user@local:~$</span> <span class="cmd">java -jar ManualProcessor.jar /data/images/</span></div>
+                    <div>[INFO] Loading Latent Diffusion Model... Done.</div>
+                    <div>[INFO] Processing img_001.jpg... <span style="color:#aaa">Done (30.2s)</span></div>
+                    <div>[INFO] Processing img_002.jpg... <span style="color:#aaa">Done (32.5s)</span></div>
+                    <div>... (processing...) ...</div>
+                    <div>[INFO] Processing img_999.jpg... <span style="color:#aaa">Done (31.1s)</span></div>
+                    <div>[INFO] Processing img_1000.jpg... <span style="color:#aaa">Done (30.8s)</span></div>
+                    <br>
+                    <div class="log-time">[WARN] Total Execution Time: 500 minutes (~8.3 hours)</div>
+                    <div class="log-success">Process completed successfully.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="border-left: 5px solid #27ae60;">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-network-wired" style="color: #27ae60;"></i>
+                    2. Triển khai MapReduce (Distributed)
+                </div>
+                <span class="badge success">Thành công (Tốc độ cao)</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Giải pháp:</strong> Đẩy code lên cụm Hadoop. Dữ liệu được chia nhỏ (Split) và xử lý song song trên 3 Nodes.</p>
+                <p><strong>Kết quả:</strong> Tốc độ xử lý tăng vọt nhờ cơ chế Parallel Processing của Mapper.</p>
+
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+                    </div>
+                    <div><span style="color:#2ecc71">hadoop@master:~$</span> <span class="cmd">hadoop jar BigDataCObL.jar LDMJob /input /output</span></div>
+                    <div>[INFO] client.RMProxy: Connecting to ResourceManager at /0.0.0.0:8032</div>
+                    <div>[INFO] mapreduce.Job: Running job: job_16722_001</div>
+                    <div>[INFO] mapreduce.Job:  map 0% reduce 0%</div>
+                    <div>[INFO] mapreduce.Job:  map 25% reduce 0%</div>
+                    <div>[INFO] mapreduce.Job:  map 50% reduce 0%</div>
+                    <div>[INFO] mapreduce.Job:  map 100% reduce 0%</div>
+                    <div>[INFO] mapreduce.Job:  map 100% reduce 100%</div>
+                    <br>
+                    <div class="log-success">File System Counters</div>
+                    <div class="log-success">   HDFS: Number of bytes written=54833900</div>
+                    <div class="log-time" style="color: #2ecc71;">[SUCCESS] Total Execution Time: 120 minutes (~2 hours)</div>
+                    <div class="log-info">>> Hiệu năng tăng gấp 4.1 lần so với máy đơn.</div>
+                    <div><span style="color:#2ecc71">hadoop@master:~$</span> <span class="blink">_</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-images" style="color: #0984e3;"></i>
+                    3. Kết quả File Hiển thị (Output)
+                </div>
+            </div>
+            <div class="card-body">
+                <p>Dưới đây là minh họa 1 mẫu dữ liệu đã tách lớp thành công.</p>
+                
+                <div class="result-wrapper">
+                    <div class="input-box">
+                        <div style="font-weight:bold; margin-bottom:10px; color:#2d3436;">INPUT (Ảnh gốc)</div>
+                        <img src="images/input.jpg" alt="Input Image">
+                        <div style="font-size:0.8rem; color:#b2bec3; margin-top:5px;">File: train_0045.jpg</div>
+                    </div>
+
+                    <div class="output-box">
+                        <div style="font-weight:bold; margin-bottom:10px; color:#2d3436;">OUTPUT LAYERS (Từ HDFS)</div>
+                        <div class="gallery-grid">
+                            <div class="gallery-item">
+                                <img src="images/layer1.jpg">
+                                <div class="gallery-label">Layer 1</div>
+                            </div>
+                            <div class="gallery-item">
+                                <img src="images/layer2.jpg">
+                                <div class="gallery-label">Layer 2</div>
+                            </div>
+                            <div class="gallery-item">
+                                <img src="images/layer3.jpg">
+                                <div class="gallery-label">Layer 3</div>
+                            </div>
+                            <div class="gallery-item">
+                                <img src="images/layer4.jpg">
+                                <div class="gallery-label">Layer 4</div>
+                            </div>
+                            <div class="gallery-item">
+                                <img src="images/layer5.jpg">
+                                <div class="gallery-label">Layer 5</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        &copy; 2025, Dai hoc Thuy Loi
+    </div>
+
+</body>
+</html>
